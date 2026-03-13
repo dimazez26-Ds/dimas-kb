@@ -1,8 +1,3 @@
-/**
- * @supported 773EF602 18E2989B
- * SYSTEM KB BY OJENG - QUANX REMOTE VERSION
- */
-
 const MY_TOKEN = "ojeng_gacor"; 
 
 const _0xU1 = "aHR0cHM6"+"Ly9wYXN0ZWJpbi"+"5jb20vcmF3L0d"+"NMVIyZjh1";
