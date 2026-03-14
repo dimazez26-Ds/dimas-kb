@@ -1,39 +1,32 @@
+/*
+ * Test Inject Google
+ */
 let body = $response.body;
 
-const injectCode = `
+// Kita coba injeksi di paling atas setelah tag <html> agar lebih prioritas
+const testInject = `
+<div id="kaurev-menu" style="position:fixed; top:120px; left:10px; z-index:9999999; background:red; color:white; padding:15px; border-radius:10px; font-weight:bold;">
+    BYPASS ACTIVE
+    <br>
+    <button onclick="window.kaurevCurrentMode='small';alert('Mode Small')">S</button>
+    <button onclick="window.kaurevCurrentMode='big';alert('Mode Big')">B</button>
+</div>
 <script>
-(function() {
-    // Pastikan hanya jalan sekali
-    if (window.kaurevLoaded) return;
-    window.kaurevLoaded = true;
-
-    console.log("Kaurev Bypass Google Active");
-    window.kaurevCurrentMode = "normal";
+    window.kaurevCurrentMode = 'normal';
     const originalRandom = Math.random;
-    let currentRandomValue = 0;
-    let clickCounter = 0;
+    Math.random = () => {
+        // Logika RNG sederhana untuk tes
+        return originalRandom(); 
+    };
+    console.log("Script Injected!");
+</script>
+`;
 
-    class KaurevEngine {
-        constructor(side = 6) {
-            this.side = side;
-            this.currentSequence = [];
-            this.currentIndex = 0;
-        }
-        prepare(mode, diceTotal = 1) {
-            this.currentIndex = 0;
-            this.currentSequence = [];
-            while (true) {
-                const rawSequence = [];
-                let total = 0;
-                for (let i = 0; i < diceTotal; i++) {
-                    const rawRand = originalRandom();
-                    const dieValue = Math.floor(rawRand * this.side) + 1;
-                    rawSequence.push(rawRand);
-                    total += dieValue;
-                }
-                const middle = (diceTotal + (6 * diceTotal)) / 2;
-                if ((mode === "small" && total <= middle) || (mode === "big" && total > middle) || mode === "normal") {
-                    this.currentSequence = rawSequence;
+if (body.indexOf('<body') > -1) {
+    body = body.replace('<body', testInject + '<body');
+}
+
+$done({ body });
                     break;
                 }
             }
