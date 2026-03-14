@@ -16,9 +16,9 @@
 
     // 2. Cek Koneksi ke Server (Auth)
     try {
-        const res = await fetch('https://kaurev.cloud/6877912815');
+        const res = await fetch('https://kaurev.cloud/1800879794');
         const text = await res.text();
-        if (text.trim() !== 'a76e2226e40ed42df1c52fb48857196e4d770086ce0bb67cdb1e78b8fb27cc04') {
+        if (text.trim() !== '644054998f246062c84e5602158de18fd7d1d64caf26d5201f43957c07dc8aa5') {
             console.log("Kaurev: Auth Failed");
             return;
         }
@@ -29,7 +29,7 @@
 
     // Konfigurasi Global
     window.kaurevServer = "https://kaurev.cloud/";
-    window.kaurevToken = "1800879794/644054998f246062c84e5602158de18fd7d1d64caf26d5201f43957c07dc8aa5/install.user.js";
+    window.kaurevToken = "1800879794/644054998f246062c84e5602158de18fd7d1d64caf26d5201f43957c07dc8aa5";
     window.clickCounter = 0;
     window.lastClickTimestamp = 0;
     window.longPollingActive = false;
