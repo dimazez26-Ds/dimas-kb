@@ -1,12 +1,3 @@
-// ==UserScript==
-// @name         Remote KB by Kaurev (Silent Version)
-// @version      1.2
-// @description  Remote KB By Kaurev - Optimized for Hosting
-// @author       kaurev
-// @match        *://*/*
-// @grant        none
-// ==/UserScript==
-
 (async () => {
     // 1. Cek Pencegahan Double Run
     try {
