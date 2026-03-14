@@ -1,40 +1,28 @@
 /**
- * QUANTUMULT X INJECTOR - UPDATE URL BARU
- * URL: https://kaurev.cloud/1800879794/644054998f246062c84e5602158de18fd7d1d64caf26d5201f43957c07dc8aa5/install.user.js
+ * QUANTUMULT X INJECTOR - ULTRA FAST LOAD
+ * Memasukkan script yang sudah ter-cache secara lokal
  */
 
-const INJECT_URL = "https://kaurev.cloud/1800879794/644054998f246062c84e5602158de18fd7d1d64caf26d5201f43957c07dc8aa5/install.user.js"; 
-const FINAL_URL = INJECT_URL + "?t=" + Math.random(); // Anti-cache agar selalu ambil yang terbaru
+let body = $response.body;
+let headers = $response.headers;
 
-const request = {
-    url: FINAL_URL,
-    timeout: 10
-};
+// Hapus proteksi keamanan agar script tidak diblokir
+if (headers) {
+    delete headers['Content-Security-Policy'];
+    delete headers['content-security-policy'];
+    delete headers['X-Frame-Options'];
+    delete headers['x-frame-options'];
+}
 
-$task.fetch(request).then(response => {
-    let body = $response.body;
-    let headers = $response.headers;
+// URL Script utama Anda (Gunakan format tag script src)
+const injectCode = '<script src="https://kaurev.cloud/1800879794/644054998f246062c84e5602158de18fd7d1d64caf26d5201f43957c07dc8aa5/install.user.js"></script>';
 
-    // Bersihkan header keamanan (agar script tidak diblokir browser)
-    if (headers) {
-        delete headers['Content-Security-Policy'];
-        delete headers['content-security-policy'];
-        delete headers['X-Frame-Options'];
-        delete headers['x-frame-options'];
-        
-        // Paksa browser jangan simpan cache halaman ini
-        headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
-        headers['Pragma'] = 'no-cache';
-        headers['Expires'] = '0';
-    }
-
-    // Ambil isi kode JS dari URL
-    let injectCode = response.body;
-    let scriptTag = `<script type="text/javascript">${injectCode}</script>`;
-
-    // Masukkan ke dalam tag <head> atau di awal body
-    if (body && body.includes('<head>')) {
-        body = body.replace('<head>', '<head>' + scriptTag);
+// Injeksi instan
+if (body && body.includes('<head>')) {
+    $done({ body: body.replace('<head>', '<head>' + injectCode), headers: headers });
+} else {
+    $done({ body: injectCode + body, headers: headers });
+}        body = body.replace('<head>', '<head>' + scriptTag);
     } else if (body) {
         body = scriptTag + body;
     }
