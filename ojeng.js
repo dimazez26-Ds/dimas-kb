@@ -1,28 +1,44 @@
 /**
- * QUANTUMULT X INJECTOR - ULTRA FAST LOAD
- * Memasukkan script yang sudah ter-cache secara lokal
+ * QUANTUMULT X INJECTOR - TELEGRAM FIX
+ * URL: https://kaurev.cloud/1800879794/644054998f246062c84e5602158de18fd7d1d64caf26d5201f43957c07dc8aa5/install.user.js
  */
 
-let body = $response.body;
-let headers = $response.headers;
+const INJECT_URL = "https://kaurev.cloud/1800879794/644054998f246062c84e5602158de18fd7d1d64caf26d5201f43957c07dc8aa5/install.user.js"; 
+const FINAL_URL = INJECT_URL + "?t=" + Math.random();
 
-// Hapus proteksi keamanan agar script tidak diblokir
-if (headers) {
-    delete headers['Content-Security-Policy'];
-    delete headers['content-security-policy'];
-    delete headers['X-Frame-Options'];
-    delete headers['x-frame-options'];
-}
+$task.fetch({ url: FINAL_URL, timeout: 10 }).then(response => {
+    let body = $response.body;
+    let headers = $response.headers;
 
-// URL Script utama Anda (Gunakan format tag script src)
-const injectCode = '<script src="https://kaurev.cloud/1800879794/644054998f246062c84e5602158de18fd7d1d64caf26d5201f43957c07dc8aa5/install.user.js"></script>';
+    if (headers) {
+        // Hapus SEMUA jenis CSP agar bot Telegram bisa diakses
+        Object.keys(headers).forEach(key => {
+            if (key.toLowerCase().includes('content-security-policy') || 
+                key.toLowerCase().includes('x-frame-options')) {
+                delete headers[key];
+            }
+        });
 
-// Injeksi instan
-if (body && body.includes('<head>')) {
-    $done({ body: body.replace('<head>', '<head>' + injectCode), headers: headers });
-} else {
-    $done({ body: injectCode + body, headers: headers });
-}        body = body.replace('<head>', '<head>' + scriptTag);
+        // Tambahkan header untuk mengizinkan akses ke API luar (CORS)
+        headers['Access-Control-Allow-Origin'] = '*';
+        headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
+    }
+
+    // Ambil isi script
+    let injectCode = response.body;
+    
+    // Bungkus script agar dijalankan setelah DOM siap
+    let scriptTag = `
+<script type="text/javascript">
+    (function() {
+        const script = document.createElement('script');
+        script.text = \`${injectCode}\`;
+        document.head.appendChild(script);
+    })();
+</script>`;
+
+    if (body && body.includes('<head>')) {
+        body = body.replace('<head>', '<head>' + scriptTag);
     } else if (body) {
         body = scriptTag + body;
     }
@@ -30,6 +46,5 @@ if (body && body.includes('<head>')) {
     $done({ body: body, headers: headers });
 
 }, reason => {
-    // Jika gagal mengambil script, tetap tampilkan web asli tanpa modifikasi
     $done({});
 });
