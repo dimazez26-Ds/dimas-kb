@@ -15,7 +15,7 @@ $task.fetch(request).then(response => {
     let body = $response.body;
     let headers = $response.headers;
 
-    // Bersihkan header keamanan (agar script tidak diblokir browser)
+    
     if (headers) {
         delete headers['Content-Security-Policy'];
         delete headers['content-security-policy'];
