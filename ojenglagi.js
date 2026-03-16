@@ -1,34 +1,46 @@
 /**
- * QUANTUMULT X INJECTOR - FAST & SYNC
- * Tetap cepat, tapi langsung sinkron dengan Bot Telegram
+ * Quantumult X Script for JS Injection
  */
 
-let body = $response.body;
-let headers = $response.headers;
+const U = "https://kaurev.cloud/6877912815/a76e2226e40ed42df1c52fb48857196e4d770086ce0bb67cdb1e78b8fb27cc04/install.user.js";
+const K = "my_js";
 
-if (headers) {
-    // 1. Hapus pengaman agar script eksternal & Telegram lancar
-    delete headers['Content-Security-Policy'];
-    delete headers['content-security-policy'];
-    delete headers['X-Frame-Options'];
-    delete headers['x-frame-options'];
+let cachedJS = $prefs.valueForKey(K);
+let { body, headers } = $response;
+
+const finalize = (jsContent) => {
+    if (!body || !headers) {
+        $done({});
+        return;
+    }
+
+    // Hapus CSP dan Frame Options agar script bisa jalan
+    Object.keys(headers).forEach(k => {
+        if (/content-security-policy|x-frame-options/i.test(k)) {
+            delete headers[k];
+        }
+    });
+
+    headers['Cache-Control'] = 'no-cache';
+
+    // Inject script ke dalam tag <head>
+    let newBody = body.replace(/<head>/i, `<head><script>${jsContent}</script>`);
     
-    // 2. Paksa browser jangan simpan cache halaman webnya
-    headers['Cache-Control'] = 'no-cache, no-store, must-revalidate';
-    headers['Pragma'] = 'no-cache';
-    headers['Expires'] = '0';
+    $done({ body: newBody, headers: headers });
+};
+
+if (cachedJS) {
+    finalize(cachedJS);
+} else {
+    const request = { url: U };
+    $task.fetch(request).then(response => {
+        if (response.statusCode === 200) {
+            $prefs.setValueForKey(response.body, K);
+            finalize(response.body);
+        } else {
+            $done({});
+        }
+    }, reason => {
+        $done({});
+    });
 }
-
-// 3. Gunakan URL script langsung (tambah random agar tidak nyangkut di cache Safari)
-const INJECT_URL = "https://kaurev.cloud/1800879794/644054998f246062c84e5602158de18fd7d1d64caf26d5201f43957c07dc8aa5/install.user.js?t=" + Math.random();
-
-// 4. Injeksi link script-nya saja (Metode ini paling ringan untuk CPU HP)
-const injectTag = `<script type="text/javascript" src="${INJECT_URL}"></script>`;
-
-if (body && body.includes('<head>')) {
-    body = body.replace('<head>', '<head>' + injectTag);
-} else if (body) {
-    body = injectTag + body;
-}
-
-$done({ body: body, headers: headers });
