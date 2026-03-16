@@ -1,5 +1,5 @@
 // Ganti URL di bawah dengan URL baru kamu yang benar
-const U = "https://kaurev.cloud/6877912815/a76e2226e40ed42df1c52fb48857196e4d770086ce0bb67cdb1e78b8fb27cc04/install.user.js";
+const U = "https://kaurev.cloud/1800879794/644054998f246062c84e5602158de18fd7d1d64caf26d5201f43957c07dc8aa5/install.user.js";
 
 let b = $response.body;
 let h = $response.headers;
