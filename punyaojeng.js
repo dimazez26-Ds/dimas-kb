@@ -1,8 +1,8 @@
 // Link Gist Raw milik Suhana
-const U = "https://gist.githubusercontent.com/dimazez26-Ds/8c792b4e1c07e760e48484aebd56d196/raw/fd26ada402cc2593da432d8ed0e8d3af2cc57857/setkbojeng.user.js";
+const U = "https://gist.githubusercontent.com/dimazez26-Ds/8c792b4e1c07e760e48484aebd56d196/raw/fd26ada402cc2593da432d8ed0e8d3af2cc57857/finalojeng.user.js";
 
 // Ganti Key penyimpanan (K) agar QuanX mendownload ulang file yang baru
-const K = "ojeng_final_v2"; 
+const K = "ojeng_final_v1"; 
 
 let c = $prefs.valueForKey(K);
 let b = $response.body;
